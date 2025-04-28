@@ -12,9 +12,9 @@ SERVER = server.c
 SRC = client_utils.c server_utils.c
 OBJ = $(SRC:.c=.o)
 
-all: $(NAME)
+all: $(NAME) client server
 
-$(NAME): $(LIB) client server
+$(NAME): $(LIB)
 
 client : $(LIB) $(FTPRINTF) $(GNL)
 	cc $(CLIENT) $(LIB) $(FTPRINTF) $(GNL) -o client
