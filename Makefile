@@ -1,32 +1,30 @@
-LIB = minitalk.a
+NAME = minitalk.a
 FTPRINTF = ./lib/libftprintf.a#libft + printf
 GNL = ./lib/libgnl.a#getnextline
 
 FTPRINTF_NAME = libftprintf.a#libft + printf
 GNL_NAME = libgnl.a#getnextline
 
-# CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 
 CLIENT = client.c
 SERVER = server.c
 SRC = client_utils.c server_utils.c
 OBJ = $(SRC:.c=.o)
 
-all: $(NAME) client server
+all: client server
 
-$(NAME): $(LIB)
-
-client : $(LIB) $(FTPRINTF) $(GNL)
-	cc $(CLIENT) $(LIB) $(FTPRINTF) $(GNL) -o client
-
-server : $(LIB) $(FTPRINTF) $(GNL)
-	cc $(SERVER) $(LIB) $(FTPRINTF) $(GNL) -o server
-
-$(LIB): $(OBJ)
-	ar -rcs $(LIB) $(OBJ)
+$(NAME): $(OBJ)
+	ar -rcs $(NAME) $(OBJ)
 
 $(OBJ): $(SRC)
 	cc $(CFLAGS) -c $^
+
+client : $(NAME) $(FTPRINTF) $(GNL)
+	cc $(CLIENT) $(NAME) $(FTPRINTF) $(GNL) $(CFLAGS) -o client
+
+server : $(NAME) $(FTPRINTF) $(GNL)
+	cc $(SERVER) $(NAME) $(FTPRINTF) $(GNL) $(CFLAGS) -o server
 
 $(FTPRINTF):
 	$(MAKE) -C ./lib/printf
@@ -43,7 +41,7 @@ clean:
 
 fclean:
 	rm -f client server
-	rm -f $(LIB) $(FTPRINTF) $(GNL)
+	rm -f $(NAME) $(FTPRINTF) $(GNL)
 	$(MAKE) fclean -C ./lib/get_next_line
 	$(MAKE) fclean -C ./lib/printf
 
@@ -51,5 +49,5 @@ re: fclean all
 
 # bonus: all
 
-.PHONY: all clean fclean re bonus client server
+.PHONY: all clean fclean re bonus
 # cc server.c server_utils.c ./minitalk.a ./lib/libftprintf.a ./lib/libgnl.a -g -Wall -Wextra -Werror -o server
